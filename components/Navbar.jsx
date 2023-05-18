@@ -3,10 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { signOut, signIn, getProviders } from "next-auth/react";
+import { signOut, signIn, getProviders, useSession } from "next-auth/react";
 
 const Navbar = () => {
-  const isLoggedIn = true;
+  const { data: session } = useSession();
   const [providers, setProviders] = useState(null);
   const [dropdown, setDropdown] = useState(false);
 
@@ -34,7 +34,7 @@ const Navbar = () => {
 
       {/* Desktop Navigation */}
       <div className="hidden sm:flex">
-        {isLoggedIn ? (
+        {session?.user ? (
           <div className="flex gap-3 mg:gap-5">
             <Link href="/create-prompt" className="black_btn">
               Create Prompt
@@ -44,7 +44,7 @@ const Navbar = () => {
             </button>
             <Link href="/profile">
               <Image
-                src="/assets/images/logo.svg"
+                src={session?.user.image}
                 alt="profile"
                 width={37}
                 height={37}
@@ -71,10 +71,10 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       <div className="sm:hidden flex relative">
-        {isLoggedIn ? (
+        {session?.user ? (
           <div className="flex">
             <Image
-              src="/assets/images/logo.svg"
+              src={session?.user.image}
               alt="profile"
               width={37}
               height={37}
