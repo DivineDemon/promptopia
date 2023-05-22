@@ -13,7 +13,24 @@ const MyProfile = () => {
   const handleEdit = (prompt) => {
     router.push(`/update-prompt?id=${prompt._id}`);
   };
-  const handleDelete = async (prompt) => {};
+  const handleDelete = async (prompt) => {
+    const hasConfirmed = confirm(
+      "Are you Sure you want to Delete this Prompt ?"
+    );
+
+    if (hasConfirmed) {
+      try {
+        await fetch(`api/prompt/${prompt._id.toString()}`, {
+          method: "DELETE",
+        });
+
+        const filteredPrompts = prompts.filter((p) => p._id !== prompt._id);
+        setPrompts(filteredPrompts);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchPrompts = async () => {
